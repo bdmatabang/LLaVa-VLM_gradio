@@ -6,11 +6,15 @@ A Vision Language Model app powered by [Gradio](https://www.gradio.app/) and [Ll
 ## Instructions
 1. Install required modules
 
-``` pip install -r requirements.txt ```
+```
+pip install -r requirements.txt
+```
 
 2. Run python file
 
-```python run.py```
+```
+python run.py
+```
 
 3. Open app using the local URL provided in the terminal
 4. Capture an image using your camera
