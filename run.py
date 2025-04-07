@@ -20,12 +20,21 @@ def generate_response(model, processor, image, question):
 
     print("Preparing inputs!")
     # Prepare inputs
-    prompt = processor.apply_chat_template(conversation, add_generation_prompt=False)
+    prompt = processor.apply_chat_template(conversation, add_generation_prompt=True)
     inputs = processor(text=prompt, images=[image], return_tensors="pt")
     inputs = inputs.to("cuda")
 
     # Generate outputs
-    generated_ids = model.generate(**inputs, max_new_tokens=100)
+    generated_ids = model.generate(
+        **inputs,
+        max_new_tokens=100,
+        do_sample=True,
+        temperature=0.7,
+        top_p=0.9,
+        repetition_penalty=1.3,
+        eos_token_id=processor.tokenizer.eos_token_id,
+        pad_token_id=processor.tokenizer.pad_token_id,)
+
     generated_texts = processor.batch_decode(
         generated_ids,
         skip_special_tokens=True,
@@ -37,7 +46,6 @@ def generate_response(model, processor, image, question):
 
 
 def main(capture,prompt):
-    print("Loading Model")
     model_id = "llava-hf/llava-onevision-qwen2-0.5b-ov-hf"
     model = LlavaOnevisionForConditionalGeneration.from_pretrained(
       model_id, 
